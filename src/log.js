@@ -218,8 +218,38 @@ if (typeof JSON !== 'object') {
         emptyFn = function() {},
         empty = {},
         timeCounters;
-    function resize(){
 
+    function $(id){
+        return document.getElementById(id);
+    }
+    function resize(elem){
+        var debugElem = $('__debug'),
+            conentElem = $('__debug_content');
+        elem.onmousedown = function(event){
+            var event = event || window.event;
+            var startX = event.clientX - elem.offsetLeft;
+            var startY = event.clientY - elem.offsetTop;
+            var debugElemTop = debugElem.offsetTop;
+            var debugElemHeigth = debugElem.offsetHeight;
+            var conentElemHeigth = conentElem.offsetHeight;
+
+            document.onmousemove = function(){
+                var event = event || window.event;
+                var distX = event.clientX - startX;
+                var distY = event.clientY - startY;
+                document.title += distY;
+                var iHeight = elem.offsetHeight - distY;
+                debugElem.style.top = debugElemTop - iHeight + "px";
+                debugElem.style.height = debugElemHeigth + iHeight + "px";
+                conentElem.style.height = conentElemHeigth + iHeight + 'px';
+                return false; 
+            }
+
+            document.onmouseup = function (){
+                document.onmousemove = null;
+                document.onmouseup = null;
+            };
+        } 
     }
 
     for (i = methods.length; i--;) empty[methods[i]] = emptyFn;
@@ -266,13 +296,13 @@ if (typeof JSON !== 'object') {
             if (!dbg) {
                 dbg = doc.createElement('div');
                 dbg.id = '__debug';
-                dbg.style.cssText = 'position:fixed;*position:absolute;' + 'bottom:0;' + ';width:99%;height:100px;overflow:hidden;' + 'z-index:100000;background:#fff;font-size:11px;';
+                dbg.style.cssText = 'position:fixed;*position:absolute;bottom:0;width:99%;height:100px;overflow:hidden;z-index:100000;background:#fff;font-size:11px;';
                 doc.body.appendChild(dbg);
                 var topBar = doc.createElement('div');
-                topBar.style.cssText = 'cursor:n-resize;height:16px;' + 'line-height:16px;background:#DDD;position:relative;';
-                topBar.innerHTML = '<span style="margin-left:5px;color:white;' + 'font-weight:bold;">Log</span>';
+                topBar.style.cssText = 'cursor:n-resize;height:16px;line-height:16px;background:#DDD;position:relative;';
+                topBar.innerHTML = '<span style="margin-left:5px;color:white;font-weight:bold;">Log</span>';
                 var clear = doc.createElement('span');
-                var acss = 'color:white;cursor:pointer;position:absolute;' + 'right:45px;text-decoration:underline;';
+                var acss = 'color:white;cursor:pointer;position:absolute;right:45px;text-decoration:underline;';
                 clear.style.cssText = acss;
                 clear.innerHTML = 'Clear';
                 clear.onclick = function() {
@@ -297,7 +327,10 @@ if (typeof JSON !== 'object') {
                 cont.id = '__debug_content';
                 cont.style.cssText = 'height:80px;overflow:auto;' + 'background:#fff;margin:2px 5px;color:#333333;';
                 dbg.appendChild(topBar);
-                dbg.appendChild(cont);
+                dbg.appendChild(cont);  
+                window.onload = window.onresize = function(){
+                    resize(topBar);
+                }
             }
             dbg.style.display = '';
             cont.appendChild(mess);
