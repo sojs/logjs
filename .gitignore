@@ -1,0 +1,5 @@
+*.jar
+*.bak
+*.sublime-project
+*.sublime-workspace
+vendors
