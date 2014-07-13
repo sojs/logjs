@@ -253,7 +253,7 @@ if (typeof JSON !== 'object') {
     }
 
     for (i = methods.length; i--;) empty[methods[i]] = emptyFn;
-    if (!console) {
+    if (console) {
         for (i = methods.length; i--;) {
             console[methods[i]] = methods[i] in console ?
                 bind(console, console[methods[i]]) : emptyFn;
