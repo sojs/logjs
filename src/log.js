@@ -249,7 +249,7 @@ if (typeof JSON !== 'object') {
     }
 
     for (i = methods.length; i--;) empty[methods[i]] = emptyFn;
-    if (!console) {
+    if (console) {
         for (i = methods.length; i--;) {
             console[methods[i]] = methods[i] in console ? bind(console, console[methods[i]]) : emptyFn;
         }
@@ -291,7 +291,7 @@ if (typeof JSON !== 'object') {
             if (!dbg) {
                 dbg = doc.createElement('div');
                 dbg.id = '__debug';
-                dbg.style.cssText = 'position:fixed;*position:absolute;bottom:0;width:98.5%;height:150px;overflow:hidden;z-index:100000;background:#fff;font-size:11px;';
+                dbg.style.cssText = 'position:fixed;*position:absolute;bottom:0;width:99%;height:150px;overflow:hidden;z-index:100000;background:#fff;font-size:11px;';
                 doc.body.appendChild(dbg);
                 var topBar = doc.createElement('div');
                 topBar.style.cssText = 'cursor:n-resize;height:16px;line-height:16px;background:#888;position:relative;';
